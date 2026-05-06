@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Soul — Discover Your Brand Kit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&family=Lato:ital,wght@0,300;0,400;1,400&family=Karla:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Raleway:wght@300;400;500&family=Work+Sans:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:       #F4EEE4;
+      --cream-deep:  #EBE3D4;
+      --brown-deep:  #2A1F1A;
+      --brown-mid:   #6B4F3A;
+      --brown-light: #A08070;
+      --terracotta:  #B35438;
+      --terra-pale:  #E8C4B0;
+      --sage:        #7A8F76;
+      --gold:        #C8922A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100dvh;
+      background: var(--cream);
+      color: var(--brown-deep);
+      font-family: 'Jost', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── BLOB BACKGROUND ─────────────────────────────────────── */
+    .blob-stage {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      will-change: transform;
+    }
+
+    .blob-a {
+      top: -120px; left: -160px;
+      width: clamp(320px, 50vw, 580px);
+      animation: floatA 13s ease-in-out infinite;
+    }
+    .blob-b {
+      bottom: -80px; right: -120px;
+      width: clamp(280px, 40vw, 500px);
+      animation: floatB 17s ease-in-out infinite;
+    }
+    .blob-c {
+      top: 45%; left: 55%;
+      width: clamp(180px, 25vw, 300px);
+      animation: floatC 21s ease-in-out infinite;
+    }
+
+    @keyframes floatA {
+      0%,100% { transform: translate(0,0) rotate(0deg); }
+      40%     { transform: translate(18px,-22px) rotate(4deg); }
+      70%     { transform: translate(-12px,10px) rotate(-2deg); }
+    }
+    @keyframes floatB {
+      0%,100% { transform: translate(0,0) rotate(0deg); }
+      35%     { transform: translate(-20px,-16px) rotate(-5deg); }
+      65%     { transform: translate(14px,8px) rotate(3deg); }
+    }
+    @keyframes floatC {
+      0%,100% { transform: translate(0,0) rotate(0deg); }
+      50%     { transform: translate(-10px,-24px) rotate(6deg); }
+    }
+
+    /* ── SCREEN SYSTEM ───────────────────────────────────────── */
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1.5rem, 5vw, 3rem);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s cubic-bezier(.4,0,.2,1);
+      z-index: 1;
+      overflow-y: auto;
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #screen-results {
+      justify-content: flex-start;
+      padding-top: 3rem;
+      padding-bottom: 5rem;
+    }
+
+    /* ── TYPOGRAPHY HELPERS ──────────────────────────────────── */
+    .eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      opacity: 0.65;
+    }
+
+    /* ── WELCOME ─────────────────────────────────────────────── */
+    .welcome-wrap {
+      max-width: 580px;
+      text-align: center;
+    }
+    .welcome-wrap .eyebrow {
+      display: block;
+      margin-bottom: 1.6rem;
+    }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 9vw, 6rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      color: var(--brown-deep);
+      margin-bottom: 0.4rem;
+    }
+    .welcome-title em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+    .welcome-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--brown-mid);
+      line-height: 1.55;
+      margin-bottom: 2rem;
+    }
+    .welcome-body {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--brown-mid);
+      line-height: 1.9;
+      margin-bottom: 3rem;
+      max-width: 430px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── BUTTONS ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 1rem 2.4rem;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.28s ease, transform 0.2s ease, box-shadow 0.28s ease;
+      text-decoration: none;
+    }
+    .btn-dark {
+      background: var(--brown-deep);
+      color: var(--cream);
+    }
+    .btn-dark:hover {
+      background: var(--terracotta);
+      transform: translateY(-2px);
+    }
+    .btn-terra {
+      background: var(--terracotta);
+      color: #fff;
+    }
+    .btn-terra:hover {
+      background: var(--brown-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(42,31,26,0.18);
+    }
+    .btn-ghost {
+      background: none;
+      border: 1.5px solid rgba(42,31,26,0.25);
+      color: var(--brown-deep);
+    }
+    .btn-ghost:hover {
+      background: var(--brown-deep);
+      color: var(--cream);
+    }
+
+    /* ── PROGRESS DOTS ───────────────────────────────────────── */
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 2.8rem;
+    }
+    .pdot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(42,31,26,0.18);
+      transition: all 0.35s ease;
+    }
+    .pdot.done  { background: rgba(42,31,26,0.35); }
+    .pdot.current {
+      width: 22px;
+      border-radius: 4px;
+      background: var(--terracotta);
+    }
+
+    /* ── QUESTION ────────────────────────────────────────────── */
+    .q-wrap {
+      max-width: 640px;
+      width: 100%;
+    }
+    .q-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 14vw, 9rem);
+      font-weight: 300;
+      color: var(--terracotta);
+      opacity: 0.11;
+      line-height: 1;
+      margin-bottom: -1.2rem;
+      display: block;
+      user-select: none;
+    }
+    .q-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.45rem, 3.8vw, 2.3rem);
+      font-weight: 400;
+      line-height: 1.28;
+      color: var(--brown-deep);
+      margin-bottom: 0.6rem;
+    }
+    .q-hint {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--brown-light);
+      margin-bottom: 2rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── OPTION CARDS ────────────────────────────────────────── */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .opt {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255,255,255,0.52);
+      border: 1.5px solid rgba(42,31,26,0.1);
+      border-radius: 18px;
+      padding: 1.05rem 1.4rem;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .opt:hover {
+      background: rgba(179,84,56,0.07);
+      border-color: rgba(179,84,56,0.4);
+      transform: translateX(5px);
+    }
+    .opt.chosen {
+      background: var(--brown-deep);
+      border-color: var(--brown-deep);
+    }
+    .opt-mark {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(42,31,26,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      color: var(--brown-mid);
+      transition: all 0.22s ease;
+    }
+    .opt.chosen .opt-mark {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      color: #fff;
+    }
+    .opt-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--brown-deep);
+      transition: color 0.22s ease;
+    }
+    .opt.chosen .opt-label { color: var(--cream); }
+
+    /* ── LOADING ─────────────────────────────────────────────── */
+    .load-wrap { text-align: center; }
+    .load-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--brown-deep);
+      margin-bottom: 0.4rem;
+    }
+    .load-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      opacity: 0.45;
+      margin-bottom: 3.5rem;
+    }
+    .spinner {
+      width: 72px; height: 72px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .spinner::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        var(--terracotta) 0%,
+        var(--sage) 33%,
+        var(--gold) 66%,
+        var(--terracotta) 100%
+      );
+      animation: spin 1.8s linear infinite;
+    }
+    .spinner::after {
+      content: '';
+      position: absolute; inset: 9px;
+      border-radius: 50%;
+      background: var(--cream);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESULTS ─────────────────────────────────────────────── */
+    .results-wrap {
+      max-width: 700px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .results-eyebrow {
+      display: block;
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+    .results-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      text-align: center;
+      color: var(--brown-deep);
+      margin-bottom: 0.3rem;
+    }
+    .results-mood {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--terracotta);
+      text-align: center;
+      margin-bottom: 1.4rem;
+      letter-spacing: 0.02em;
+    }
+    .results-desc {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.95;
+      color: var(--brown-mid);
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto 3rem;
+    }
+
+    /* section divider */
+    .sec-div {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .sec-div::before, .sec-div::after {
+      content: ''; flex: 1;
+      height: 1px; background: rgba(42,31,26,0.1);
+    }
+    .sec-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.63rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      opacity: 0.48;
+      white-space: nowrap;
+    }
+
+    /* palette */
+    .palette-row {
+      display: flex;
+      gap: 0.9rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .swatch-col {
+      flex: 1;
+      min-width: 90px;
+      cursor: pointer;
+    }
+    .swatch {
+      width: 100%;
+      padding-bottom: 100%;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      margin-bottom: 0.7rem;
+    }
+    .swatch:hover { transform: scale(1.07); box-shadow: 0 10px 32px rgba(0,0,0,0.15); }
+    .swatch-name {
+      display: block; text-align: center;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem; font-weight: 300;
+      color: var(--brown-mid); opacity: 0.7;
+      margin-bottom: 0.2rem;
+    }
+    .swatch-hex {
+      display: block; text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem; font-weight: 600;
+      color: var(--brown-deep);
+      letter-spacing: 0.04em;
+    }
+    .copy-tip {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.6rem;
+      text-align: center;
+      color: var(--brown-light);
+      opacity: 0.5;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    /* font box */
+    .font-box {
+      background: rgba(255,255,255,0.5);
+      border: 1.5px solid rgba(42,31,26,0.08);
+      border-radius: 22px;
+      padding: clamp(1.5rem, 4vw, 2.2rem);
+      margin-bottom: 3rem;
+    }
+    .fsample-head {
+      line-height: 1.15;
+      color: var(--brown-deep);
+      margin-bottom: 0.3rem;
+    }
+    .fsample-sub {
+      color: var(--brown-mid);
+      margin-bottom: 1.4rem;
+    }
+    .fsample-body {
+      font-size: 0.88rem;
+      line-height: 1.85;
+      color: var(--brown-mid);
+      margin-bottom: 1.5rem;
+    }
+    .font-credits {
+      display: flex; flex-wrap: wrap; gap: 1.2rem;
+    }
+    .fcredit {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      opacity: 0.55;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .fcredit-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--terracotta);
+    }
+
+    /* brand preview card */
+    .preview-card {
+      border-radius: 26px;
+      padding: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 3rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .preview-dots { display: flex; gap: 8px; margin-bottom: 2rem; }
+    .preview-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .preview-heading {
+      line-height: 1.15;
+      margin-bottom: 0.25rem;
+    }
+    .preview-rule { height: 2px; width: 52px; margin-bottom: 1rem; border-radius: 2px; }
+    .preview-mood { font-style: italic; margin-bottom: 1.4rem; }
+    .preview-body {
+      line-height: 1.85;
+      max-width: 380px;
+      margin-bottom: 2rem;
+      opacity: 0.75;
+    }
+    .preview-cta {
+      display: inline-block;
+      padding: 0.65rem 1.6rem;
+      border-radius: 100px;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    /* cta section */
+    .cta-box {
+      background: rgba(42,31,26,0.04);
+      border-radius: 26px;
+      padding: clamp(2rem, 5vw, 3rem);
+      text-align: center;
+    }
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--brown-deep);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .cta-body {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--brown-mid);
+      line-height: 1.9;
+      margin-bottom: 2rem;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-fine {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 300;
+      color: var(--brown-light);
+      margin-top: 1rem;
+      opacity: 0.6;
+    }
+    .restart-btn {
+      background: none;
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      opacity: 0.4;
+      cursor: pointer;
+      margin-top: 2rem;
+      display: block;
+      width: 100%;
+      transition: opacity 0.2s;
+    }
+    .restart-btn:hover { opacity: 0.8; }
+
+    /* ── FADE-UP ENTRANCE ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fu  { animation: fadeUp 0.7s ease both; }
+    .fu1 { animation-delay: 0.05s; opacity: 0; }
+    .fu2 { animation-delay: 0.15s; opacity: 0; }
+    .fu3 { animation-delay: 0.25s; opacity: 0; }
+    .fu4 { animation-delay: 0.35s; opacity: 0; }
+    .fu5 { animation-delay: 0.45s; opacity: 0; }
+    .fu6 { animation-delay: 0.55s; opacity: 0; }
+
+    /* ── TOAST ───────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--brown-deep);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.8rem;
+      border-radius: 100px;
+      z-index: 999;
+      transition: transform 0.3s ease;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── TRANSITION SLIDE ────────────────────────────────────── */
+    #q-inner {
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+    #q-inner.exit {
+      opacity: 0; transform: translateX(-28px);
+    }
+    #q-inner.enter {
+      opacity: 0; transform: translateX(28px);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 520px) {
+      .palette-row { gap: 0.6rem; }
+      .swatch-col { min-width: 72px; }
+      .swatch-name, .swatch-hex, .copy-tip { font-size: 0.58rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── FLOATING BLOBS ─────────────────────────────────────────── -->
+<div class="blob-stage" aria-hidden="true">
+  <!-- terracotta top-left -->
+  <svg class="blob blob-a" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+    <path d="M310,48 C390,22 480,90 504,180 C528,270 492,370 402,412 C312,454 188,438 112,358 C36,278 48,148 136,90 C184,60 242,70 310,48Z"
+          fill="rgba(179,84,56,0.13)"/>
+  </svg>
+  <!-- sage bottom-right -->
+  <svg class="blob blob-b" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+    <path d="M240,36 C324,12 420,72 444,164 C468,256 428,360 340,402 C252,444 136,430 76,346 C16,262 32,136 120,82 C170,52 172,56 240,36Z"
+          fill="rgba(122,143,118,0.11)"/>
+  </svg>
+  <!-- gold mid-right -->
+  <svg class="blob blob-c" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+    <path d="M180,32 C244,14 308,66 330,138 C352,210 324,296 256,330 C188,364 96,346 52,278 C8,210 24,114 96,66 C136,40 128,48 180,32Z"
+          fill="rgba(200,146,42,0.09)"/>
+  </svg>
+</div>
+
+<!-- ── WELCOME ───────────────────────────────────────────────── -->
+<section class="screen active" id="screen-welcome">
+  <div class="welcome-wrap">
+    <span class="eyebrow fu fu1">A brand reading for women who lead with soul</span>
+    <h1 class="welcome-title fu fu2">Find your<br><em>brand soul</em></h1>
+    <p class="welcome-sub fu fu3">Six questions. A brand kit that actually feels like you.</p>
+    <p class="welcome-body fu fu4">
+      Not a template. Not a trend. Six questions that go beneath the surface — into the feeling, the energy, the particular way you move through the world. Your brand is already in there. We're just uncovering it.
+    </p>
+    <button class="btn btn-dark fu fu5" onclick="startQuiz()">
+      Begin the reading <span>→</span>
+    </button>
+  </div>
+</section>
+
+<!-- ── QUESTION ──────────────────────────────────────────────── -->
+<section class="screen" id="screen-question">
+  <div class="q-wrap">
+    <div id="q-inner"><!-- populated by JS --></div>
+  </div>
+</section>
+
+<!-- ── LOADING ───────────────────────────────────────────────── -->
+<section class="screen" id="screen-loading">
+  <div class="load-wrap">
+    <h2 class="load-title">Reading your brand soul…</h2>
+    <p class="load-sub">One moment</p>
+    <div class="spinner"></div>
+  </div>
+</section>
+
+<!-- ── RESULTS ───────────────────────────────────────────────── -->
+<section class="screen" id="screen-results">
+  <div class="results-wrap" id="results-inner"><!-- populated by JS --></div>
+</section>
+
+<!-- ── TOAST ─────────────────────────────────────────────────── -->
+<div class="toast" id="toast">Hex copied</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+
+const QUESTIONS = [
+  {
+    n: "01",
+    q: "When someone finds you, what do you most want them to feel?",
+    hint: "Trust the first answer that rises.",
+    opts: [
+      { t: "Like they've finally come home",             v: "A" },
+      { t: "Like something woke up inside them",         v: "B" },
+      { t: "Like the ground beneath them is solid",      v: "C" },
+      { t: "Like they can finally breathe",              v: "D" },
+      { t: "Like they've been fully, wholly seen",       v: "E" }
+    ]
+  },
+  {
+    n: "02",
+    q: "Your work lives most in which territory?",
+    hint: "Pick the one calling loudest right now.",
+    opts: [
+      { t: "The collective — sisterhood, belonging, shared becoming",  v: "A" },
+      { t: "The body — healing, sensation, physical wisdom",           v: "B" },
+      { t: "The mind — clarity, transformation, new ways of seeing",   v: "C" },
+      { t: "The earth — cycles, seasons, land-based knowing",          v: "D" },
+      { t: "The spirit — ritual, energy, the unseen",                  v: "E" }
+    ]
+  },
+  {
+    n: "03",
+    q: "Your brand energy is closest to…",
+    hint: "Not who you're trying to be. Who you actually are.",
+    opts: [
+      { t: "A soft hand on the back — tender, steady, human",             v: "A" },
+      { t: "A fire burning through the night — bold, uncompromising",     v: "B" },
+      { t: "A window thrown open in spring — clear, inviting, hopeful",   v: "C" },
+      { t: "Soil after rain — grounded, rich, slow, alive",               v: "D" },
+      { t: "A full moon you didn't notice until you looked up",           v: "E" }
+    ]
+  },
+  {
+    n: "04",
+    q: "Which image pulls at something in you?",
+    hint: "Feeling, not logic.",
+    opts: [
+      { t: "A clay bowl, still warm from the kiln, full of wildflowers",               v: "A" },
+      { t: "Firelight on a face in the middle of speaking a hard truth",               v: "B" },
+      { t: "Morning light filtering through old linen curtains",                        v: "C" },
+      { t: "A woman standing barefoot, hands pressed into dark soil",                  v: "D" },
+      { t: "An ancient tree with roots above the earth — visible, tangled, vast",      v: "E" }
+    ]
+  },
+  {
+    n: "05",
+    q: "Your voice sounds most like…",
+    hint: "How do people describe you after they've been in your world?",
+    opts: [
+      { t: "A soft whisper that somehow carries further than you expect",   v: "A" },
+      { t: "A steady drumbeat — rhythmic, embodied, insistent",             v: "B" },
+      { t: "A story told at a table with good food and honest people",      v: "C" },
+      { t: "Wind through tall grass — organic, elemental, patient",         v: "D" },
+      { t: "A song you recognize somewhere deep but can't quite name",      v: "E" }
+    ]
+  },
+  {
+    n: "06",
+    q: "At the deepest level, what do you most want to give people?",
+    hint: "The thing under the thing.",
+    opts: [
+      { t: "Permission — to be exactly who they already are",                    v: "A" },
+      { t: "Activation — courage to do what they've been circling",             v: "B" },
+      { t: "Clarity — the thread through the labyrinth",                        v: "C" },
+      { t: "Rootedness — remembering what was always true",                     v: "D" },
+      { t: "Belonging — that they are not alone in this strange, beautiful life", v: "E" }
+    ]
+  }
+];
+
+const ARCHETYPES = {
+  A: {
+    name: "The Tender Witness",
+    mood: "Soft Sovereignty",
+    desc: "You hold space like no one else can. Your brand is a sanctuary — warm, unhurried, deeply human. People find you and exhale. They didn't know they were holding their breath until they weren't anymore.",
+    palette: [
+      { name: "Warm Mushroom", hex: "#C9B8A8" },
+      { name: "Dusty Mauve",   hex: "#9E8B7B" },
+      { name: "Warm Amber",    hex: "#D4A574" },
+      { name: "Pale Linen",    hex: "#E8DDD3" },
+      { name: "Cream White",   hex: "#F5F0E8" }
+    ],
+    df: "Fraunces",        dw: "300", di: "normal",
+    bf: "Jost",            bw: "300",
+    fn: "Fraunces · Jost"
+  },
+  B: {
+    name: "The Sacred Disruptor",
+    mood: "Rooted Fire",
+    desc: "You burn away what no longer serves. Your brand is unapologetic, embodied, transformative — you don't soften the truth, you make it undeniable. People come to you when they're finally, finally done hiding.",
+    palette: [
+      { name: "Deep Terracotta", hex: "#8B3A2A" },
+      { name: "Burnt Sienna",    hex: "#C4582A" },
+      { name: "Warm Ochre",      hex: "#D4874A" },
+      { name: "Near Black",      hex: "#2C2420" },
+      { name: "Warm Cream",      hex: "#EDE0D4" }
+    ],
+    df: "DM Serif Display", dw: "400", di: "normal",
+    bf: "Work Sans",        bw: "300",
+    fn: "DM Serif Display · Work Sans"
+  },
+  C: {
+    name: "The Luminous Guide",
+    mood: "Golden Knowing",
+    desc: "You illuminate paths. Your brand radiates warmth and hard-won wisdom, drawing people toward their own light. You've walked through enough dark to know where to put your feet — and you light the way without looking away.",
+    palette: [
+      { name: "Golden Amber", hex: "#C8922A" },
+      { name: "Warm Honey",   hex: "#E8C88A" },
+      { name: "Deep Amber",   hex: "#B07D3C" },
+      { name: "Pale Gold",    hex: "#F2E4C4" },
+      { name: "Ivory",        hex: "#FAF5EC" }
+    ],
+    df: "Playfair Display", dw: "400", di: "italic",
+    bf: "Raleway",          bw: "300",
+    fn: "Playfair Display · Raleway"
+  },
+  D: {
+    name: "The Earth Keeper",
+    mood: "Deep Rooting",
+    desc: "You tend to living things. Your brand is grounded, cyclical, nourishing — rooted in real earth. You remind people of what's underneath everything: the mycelium, the long slow knowing, the fact that healing takes exactly as long as it takes.",
+    palette: [
+      { name: "Forest Green", hex: "#3D5442" },
+      { name: "Moss",         hex: "#8B9B7B" },
+      { name: "Clay Brown",   hex: "#7B6855" },
+      { name: "Warm Sand",    hex: "#C4A882" },
+      { name: "Golden Cream", hex: "#F0EAD6" }
+    ],
+    df: "Lora",   dw: "400", di: "italic",
+    bf: "Karla",  bw: "300",
+    fn: "Lora · Karla"
+  },
+  E: {
+    name: "The Wild Mystic",
+    mood: "Sacred Wandering",
+    desc: "You live between worlds. Your brand is poetic, sensorial, reaching toward something ancient and unnamed. People find you when they're ready to stop pretending they don't feel the pull of what they can't explain.",
+    palette: [
+      { name: "Deep Plum",       hex: "#4A3847" },
+      { name: "Dusty Berry",     hex: "#7B5B6E" },
+      { name: "Terracotta Rust", hex: "#C07A5A" },
+      { name: "Sage",            hex: "#9BAA8A" },
+      { name: "Warm Linen",      hex: "#F2EDE4" }
+    ],
+    df: "Cormorant Garamond", dw: "300", di: "italic",
+    bf: "Lato",               bw: "300",
+    fn: "Cormorant Garamond · Lato"
+  }
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+let state = { q: 0, scores: { A:0, B:0, C:0, D:0, E:0 } };
+
+// ── SCREEN ───────────────────────────────────────────────────────────────────
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'screen-results') {
+    document.getElementById(id).scrollTop = 0;
+  }
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────────────────
+
+function startQuiz() {
+  state = { q: 0, scores: { A:0, B:0, C:0, D:0, E:0 } };
+  renderQ(0, false);
+  show('screen-question');
+}
+
+function renderQ(idx, animate) {
+  const inner = document.getElementById('q-inner');
+
+  const go = () => {
+    const q = QUESTIONS[idx];
+    const labels = ['a','b','c','d','e'];
+
+    const dots = QUESTIONS.map((_,i) => {
+      let c = 'pdot';
+      if (i < idx) c += ' done';
+      if (i === idx) c += ' current';
+      return `<div class="${c}"></div>`;
+    }).join('');
+
+    const opts = q.opts.map((o, i) => `
+      <div class="opt" onclick="pick('${o.v}', this)" role="button" tabindex="0"
+           onkeydown="if(event.key==='Enter'||event.key===' ')pick('${o.v}',this)">
+        <div class="opt-mark">${labels[i]}</div>
+        <div class="opt-label">${o.t}</div>
+      </div>`).join('');
+
+    inner.innerHTML = `
+      <div class="progress fu fu1">${dots}</div>
+      <span class="q-num fu fu1" aria-hidden="true">${q.n}</span>
+      <h2 class="q-text fu fu2">${q.q}</h2>
+      <p class="q-hint fu fu3">${q.hint}</p>
+      <div class="options fu fu4">${opts}</div>`;
+
+    if (animate) {
+      inner.classList.remove('enter');
+    }
+  };
+
+  if (animate) {
+    inner.classList.add('exit');
+    setTimeout(() => {
+      inner.classList.remove('exit');
+      inner.classList.add('enter');
+      go();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => inner.classList.remove('enter'));
+      });
+    }, 280);
+  } else {
+    go();
+  }
+}
+
+function pick(val, el) {
+  document.querySelectorAll('.opt').forEach(o => o.classList.remove('chosen'));
+  el.classList.add('chosen');
+
+  setTimeout(() => {
+    state.scores[val]++;
+    state.q++;
+    if (state.q >= QUESTIONS.length) {
+      showLoading();
+    } else {
+      renderQ(state.q, true);
+    }
+  }, 480);
+}
+
+function showLoading() {
+  show('screen-loading');
+  setTimeout(() => {
+    buildResults();
+    show('screen-results');
+  }, 2400);
+}
+
+// ── ARCHETYPE CALC ────────────────────────────────────────────────────────────
+
+function getKey() {
+  return Object.entries(state.scores).reduce((a,b) => a[1] >= b[1] ? a : b)[0];
+}
+
+// ── RESULTS ───────────────────────────────────────────────────────────────────
+
+function buildResults() {
+  const key  = getKey();
+  const arc  = ARCHETYPES[key];
+
+  const bg    = arc.palette[4].hex;
+  const dark  = arc.palette[0].hex;
+  const accent = arc.palette[2].hex;
+  const mid   = arc.palette[1].hex;
+
+  const swatches = arc.palette.map(p => `
+    <div class="swatch-col" onclick="copyHex('${p.hex}')" title="Click to copy ${p.hex}">
+      <div class="swatch" style="background:${p.hex}"></div>
+      <span class="copy-tip">tap to copy</span>
+      <span class="swatch-name">${p.name}</span>
+      <span class="swatch-hex">${p.hex}</span>
+    </div>`).join('');
+
+  const prevDots = arc.palette.slice(0,3).map(p =>
+    `<div class="preview-dot" style="background:${p.hex}"></div>`).join('');
+
+  document.getElementById('results-inner').innerHTML = `
+    <span class="eyebrow results-eyebrow fu fu1">Your brand is</span>
+    <h1 class="results-name fu fu2">${arc.name}</h1>
+    <p class="results-mood fu fu2">— ${arc.mood} —</p>
+    <p class="results-desc fu fu3">${arc.desc}</p>
+
+    <div class="sec-div fu fu3"><span class="sec-label">Your colour palette</span></div>
+    <div class="palette-row fu fu4">${swatches}</div>
+
+    <div class="sec-div fu fu4"><span class="sec-label">Your font pairing</span></div>
+    <div class="font-box fu fu5">
+      <div class="fsample-head" style="font-family:'${arc.df}',serif;font-size:clamp(1.9rem,5vw,3rem);font-weight:${arc.dw};font-style:${arc.di}">
+        ${arc.name}
+      </div>
+      <div class="fsample-sub" style="font-family:'${arc.df}',serif;font-size:1.1rem;font-weight:${arc.dw}">
+        ${arc.mood}
+      </div>
+      <p class="fsample-body" style="font-family:'${arc.bf}',sans-serif;font-weight:${arc.bw}">
+        This is how your body text will feel across your website, your emails, your captions — the quiet voice underneath the headline that says: I know exactly who I am, and I'm not in a rush.
+      </p>
+      <div class="font-credits">
+        <span class="fcredit"><span class="fcredit-dot"></span>Display: ${arc.df}</span>
+        <span class="fcredit"><span class="fcredit-dot"></span>Body: ${arc.bf}</span>
+      </div>
+    </div>
+
+    <div class="sec-div fu fu5"><span class="sec-label">Your brand in context</span></div>
+    <div class="preview-card fu fu6" style="background:${bg}">
+      <div class="preview-dots">${prevDots}</div>
+      <div class="preview-heading" style="font-family:'${arc.df}',serif;font-size:clamp(1.7rem,4.5vw,2.8rem);font-weight:${arc.dw};color:${dark}">
+        ${arc.name}
+      </div>
+      <div class="preview-rule" style="background:${accent}"></div>
+      <div class="preview-mood" style="font-family:'${arc.df}',serif;font-size:1rem;font-weight:${arc.dw};color:${mid}">
+        ${arc.mood}
+      </div>
+      <p class="preview-body" style="font-family:'${arc.bf}',sans-serif;font-size:0.85rem;font-weight:${arc.bw};color:${dark}">
+        Welcome. This is a space for the ones who know there's more. Who are ready to stop shrinking and start building something that actually feels like them.
+      </p>
+      <span class="preview-cta" style="font-family:'${arc.bf}',sans-serif;font-weight:400;background:${dark};color:${bg}">
+        Work with me
+      </span>
+    </div>
+
+    <div class="cta-box fu fu6">
+      <h3 class="cta-title">Your full brand kit is ready.</h3>
+      <p class="cta-body">
+        The complete kit includes your colour codes in every format, curated font files with usage guidance, your full archetype profile, brand voice notes, and a ready-to-use style board.
+      </p>
+      <a href="https://gumroad.com/l/your-brand-kit" class="btn btn-terra" target="_blank" rel="noopener">
+        Download your kit →
+      </a>
+      <p class="cta-fine">Instant download · For healers, coaches &amp; conscious entrepreneurs</p>
+      <button class="restart-btn" onclick="restart()">Start the reading again</button>
+    </div>
+  `;
+}
+
+// ── COPY HEX ─────────────────────────────────────────────────────────────────
+
+function copyHex(hex) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(hex).then(() => showToast(hex + ' copied'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = hex;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(hex + ' copied');
+  }
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function restart() {
+  show('screen-welcome');
+}
+</script>
+</body>
+</html>
